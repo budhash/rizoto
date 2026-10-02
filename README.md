@@ -14,6 +14,18 @@ python3 -m http.server 8000
 
 Then visit http://localhost:8000. Arrow keys move the photo; hold Shift for larger steps. The crop always covers the frame, preserving the photo's proportions without empty edges. Output sizes support 1–8192 pixels per side, with a 32-megapixel total limit. Small source photos can be enlarged, though enlarging cannot add detail. JPG exports use white behind transparent areas.
 
+## Passport size presets
+
+The final preset dropdown offers print-dimension references:
+
+| Preset | Physical print size | Output pixels at 300 pixels/inch |
+| --- | --- | --- |
+| [US](https://travel.state.gov/en/passports/apply/help/photos.html) | 2 × 2 inches | 600 × 600 |
+| [UK](https://www.gov.uk/photos-for-passports/photo-requirements) | 35 × 45 mm | 413 × 531 |
+| [Canada](https://www.canada.ca/en/immigration-refugees-citizenship/services/canadian-passports/photos.html) | 50 × 70 mm | 591 × 827 |
+
+Set the listed physical size in your printing software: pixel dimensions alone do not fix the printed size. These presets set dimensions only, not passport eligibility. Official rules also govern editing, head size, background, capture, and printing; the selected preset links to its authority’s requirements. These are not online-upload presets.
+
 ## Validation
 
 Node.js is used only for development checks; no dependency installation is required:

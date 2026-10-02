@@ -53,7 +53,8 @@
         <section><div class="section-heading"><span class="step">02</span><h2>Set your dimensions</h2><span class="unit">PX</span></div>
           <div class="dimensions"><label>Width<input id="width" type="number" value="630" min="1" max="8192" inputmode="numeric" aria-describedby="dimensions-error"></label><button id="swap" class="swap" aria-label="Swap width and height" title="Swap dimensions">⇄</button><label>Height<input id="height" type="number" value="810" min="1" max="8192" inputmode="numeric" aria-describedby="dimensions-error"></label></div>
           <p id="dimensions-error" class="field-error" role="status" hidden></p>
-          <div class="presets"><button data-size="630,810" class="active">630 × 810</button><button data-size="1080,1080">Square</button><button data-size="1080,1920">Story</button><button data-size="1920,1080">Landscape</button></div>
+          <div class="presets"><button data-size="1080,1080">Square</button><button data-size="1080,1920">Story</button><button data-size="1920,1080">Landscape</button><select id="passport-size" aria-label="Passport photo size" aria-describedby="passport-note"><option value="">Passport size…</option><optgroup label="Printed photo sizes"><option value="us">US · 2 × 2 in</option><option value="uk">UK · 35 × 45 mm</option><option value="ca">Canada · 50 × 70 mm</option></optgroup></select></div>
+          <p id="passport-note" class="hint" hidden><span id="passport-details"></span> <a id="passport-source" target="_blank" rel="noopener">Official photo rules ↗</a></p>
           <p class="hint">Any aspect ratio. No stretching.</p>
         </section>
         <section><div class="section-heading"><span class="step">03</span><h2>Find the perfect fit</h2></div>

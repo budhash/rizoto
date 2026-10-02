@@ -52,6 +52,8 @@ h1 .dot { color: var(--accent); }
 .presets button { padding: 6px 8px; font-family: var(--mono); font-size: 9px; color: var(--paper-dim); background: var(--chip); border: 1px solid var(--rule-hi); border-radius: 5px; }
 .presets button.active { color: var(--accent); background: rgba(110,168,254,.10); border-color: rgba(110,168,254,.4); }
 .presets button:hover { border-color: var(--accent); }
+.presets select { min-width: 100px; max-width: 100%; flex: 1 0 100px; padding: 6px 7px; font-size: 9px; }
+.presets select:has(option:checked:not([value=""])) { color: var(--accent); border-color: rgba(110,168,254,.4); }
 .hint { font-size: 11px; line-height: 1.6; color: var(--paper-dimmer); margin: 8px 0 0; }
 .slider-label { display: flex; justify-content: space-between; font-size: 12px; margin-bottom: 11px; }
 .slider-label output { font-family: var(--mono); color: var(--paper-dim); font-size: 10px; }

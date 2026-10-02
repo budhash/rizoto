@@ -71,3 +71,27 @@ test('invalid dimensions prevent export and show an actionable error', async () 
   elements.get('download').handlers.click();
   assert.equal(created.length, 0);
 });
+
+test('passport choices produce the correct country-specific output dimensions', async () => {
+  const { elements, created, context } = appHarness();
+  await vm.runInContext("loadPhoto({type:'image/png',name:'portrait.png'})", context);
+  for (const [id, width, height] of [['us', 600, 600], ['uk', 413, 531], ['ca', 591, 827]]) {
+    elements.get('passport-size').value = id;
+    elements.get('passport-size').handlers.change({ target: elements.get('passport-size') });
+    assert.equal(Number(elements.get('width').value), width);
+    assert.equal(Number(elements.get('height').value), height);
+    assert.equal(elements.get('passport-note').hidden, false);
+    elements.get('download').handlers.click();
+    const output = created.filter(el => el.tag === 'canvas').at(-1);
+    assert.equal(output.width, width); assert.equal(output.height, height);
+  }
+});
+
+test('manual changes clear a passport selection when its size no longer matches', () => {
+  const { elements } = appHarness();
+  elements.get('passport-size').value = 'uk';
+  elements.get('passport-size').handlers.change({ target: elements.get('passport-size') });
+  elements.get('width').value = '500'; elements.get('width').handlers.input();
+  assert.equal(elements.get('passport-size').value, '');
+  assert.equal(elements.get('passport-note').hidden, true);
+});

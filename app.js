@@ -2,6 +2,13 @@ const $ = id => document.getElementById(id);
 const canvas = $('preview');
 const ctx = canvas.getContext('2d');
 const state = { image: null, width: 630, height: 810, zoom: 1, x: 0, y: 0, name: 'photo' };
+// Physical print sizes converted to pixels at 300 pixels/inch.
+// These are dimension references, not a guarantee of passport acceptance.
+const passportPresets = {
+  us: { width: 600, height: 600, printSize: '2 × 2 in', source: 'https://travel.state.gov/en/passports/apply/help/photos.html' },
+  uk: { width: 413, height: 531, printSize: '35 × 45 mm', source: 'https://www.gov.uk/photos-for-passports/photo-requirements' },
+  ca: { width: 591, height: 827, printSize: '50 × 70 mm', source: 'https://www.canada.ca/en/immigration-refugees-citizenship/services/canadian-passports/photos.html' }
+};
 let noticeTimer;
 function notice(message) {
   $('status').textContent = message;
@@ -47,6 +54,14 @@ function layout() {
 function updateDimensions() {
   const width = Number($('width').value), height = Number($('height').value);
   const valid = RizotoCrop.validDimensions(width, height);
+  const passportId = valid && Object.keys(passportPresets).find(id => passportPresets[id].width === width && passportPresets[id].height === height);
+  $('passport-size').value = passportId || '';
+  $('passport-note').hidden = !passportId;
+  if (passportId) {
+    const preset = passportPresets[passportId];
+    $('passport-details').textContent = `${preset.printSize} at 300 px/in. Set this size when printing. Dimensions only; editing rules also apply.`;
+    $('passport-source').href = preset.source;
+  }
   ['width', 'height'].forEach(id => $(id).setAttribute('aria-invalid', String(!valid)));
   $('dimensions-error').hidden = valid;
   if (!valid) {
@@ -99,6 +114,12 @@ window.addEventListener('drop', e => e.preventDefault());
 ['width', 'height'].forEach(id => $(id).addEventListener('input', updateDimensions));
 $('swap').addEventListener('click', () => { const w = $('width').value; $('width').value = $('height').value; $('height').value = w; updateDimensions(); });
 document.querySelectorAll('[data-size]').forEach(b => b.addEventListener('click', () => { const [w, h] = b.dataset.size.split(','); $('width').value = w; $('height').value = h; updateDimensions(); }));
+$('passport-size').addEventListener('change', e => {
+  const preset = passportPresets[e.target.value];
+  if (!preset) return;
+  $('width').value = preset.width; $('height').value = preset.height;
+  updateDimensions();
+});
 function setZoom(value) {
   if (!state.image) return;
   const oldScale = scale();
