@@ -64,3 +64,5 @@ The repository and deployed website are public. Photos are never uploaded. There
 The page includes a descriptive title and meta description, an HTTPS canonical URL, visible HTML describing the tool, WebApplication JSON-LD, and Open Graph / Twitter metadata with a local 1200 × 630 preview image. JavaScript loads with `defer`; the page’s descriptive content is available without executing it.
 
 The central `https://budhash.com/robots.txt` allows crawling and points to `https://budhash.com/sitemap.xml`, which includes the canonical rizoto URL. A `robots.txt` inside this project path would not control domain crawling. Search Console indexing requests or sitemap submissions require the site owner’s Search Console access. These technical foundations do not guarantee indexing, rankings, or rich results.
+
+CSS and script URLs contain content hashes so browsers fetch the matching assets after an update. After editing these files, run `npm run version:assets`; `npm run check` verifies that the URLs are current. This is a development helper only; the deployed app still needs no backend or build step.
