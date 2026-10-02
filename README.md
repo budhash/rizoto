@@ -43,6 +43,23 @@ npm run check
 
 `theme.css` is vendored from the canonical budhash.com theme. Keep it in sync with `../budhash/theme.css`. Page layout and cropper-specific styles live in `style.css`. Shared colors, system fonts, display headings, labels, panels, and pills use the same design tokens as the other tools. The shell follows gomanize’s 1720px/94vw container and compact header, with a GitHub icon at the upper right. The desktop workspace fills available viewport space and grows with its controls on shorter screens, using page scrolling so settings stay visible. The empty-state prompt is centered in the preview stage independently of the crop aspect ratio. Select controls use a shared arrow instead of platform-specific decoration. Mobile uses stacked panels.
 
+## WebMCP (experimental)
+
+In browsers that expose `document.modelContext.registerTool`, rizoto registers four tools automatically. Other browsers continue to use the normal editor without loading a polyfill or making extra network requests.
+
+| Tool | Action |
+| --- | --- |
+| `rizoto_get_state` | Read source dimensions, committed output settings, crop position, and export readiness. |
+| `rizoto_set_output` | Set pixel or physical dimensions, crop/resize mode, proportions, and print resolution; refresh the visible controls and preview. |
+| `rizoto_set_crop` | Set zoom (1–4) and horizontal/vertical crop position (0–1). |
+| `rizoto_prepare_export` | Choose PNG, JPG, or WebP and report readiness; the user reviews and clicks Download photo. |
+
+Choose a photo first. Tools return metadata only, never image bytes, filenames, file paths, or download URLs. Invalid requests are rejected before changing settings. Output changes enable resampling; proportional resize derives height from width. Crop coordinates use 0 for the left/top edge, 1 for right/bottom, and 0.5 for center. No tool selects local files or downloads automatically.
+
+To try it, use a Chrome version with WebMCP support, enable `chrome://flags/#enable-webmcp-testing`, relaunch, and visit rizoto. Use Chrome's [Model Context Tool Inspector](https://developer.chrome.com/docs/ai/webmcp#imitate-agent-chat-with-the-inspector-extension) to discover and invoke the tools. For example, after choosing a photo, request “Crop this to 630 × 810 pixels, zoom to 1.2, center it, and prepare a PNG.” The browser/agent handles the conversation; rizoto contains no model or API key.
+
+WebMCP is currently experimental. No origin-trial token is installed. [Chrome documentation](https://developer.chrome.com/docs/ai/webmcp) and the [current imperative API](https://developer.chrome.com/docs/ai/webmcp/imperative-api) describe availability and inspector setup. Tool behavior is covered by runtime/controller tests and browser checks with a registration shim; native WebMCP/agent testing remains manual.
+
 ## Deployment
 
 This folder is the independent **`budhash/rizoto`** repository. GitHub Pages serves static files from `main` at `/` (root). Use a feature branch and PR for updates.
