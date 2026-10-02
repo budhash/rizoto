@@ -42,8 +42,10 @@ h1 .dot { color: var(--accent); }
 .dimensions { display: flex; align-items: flex-end; gap: 11px; }
 .control-row { display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-bottom: 12px; font-size: var(--control-text); color: var(--paper-dim); }
 .control-row select { width: 58%; min-width: 0; }
-.resolution-row { display: flex; align-items: center; gap: 8px; margin-top: 12px; font-size: var(--control-text); color: var(--paper-dim); }
-.resolution-row input { min-width: 0; width: 65px; border: 1px solid var(--rule-hi); border-radius: 5px; padding: 6px 8px; font-family: var(--sans); color: var(--paper); background: var(--well); }
+.resolution-row { display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-top: 12px; font-size: var(--control-text); color: var(--paper-dim); }
+.resolution-field { width: 58%; min-width: 0; height: 32px; display: flex; align-items: center; gap: 8px; border: 1px solid var(--rule-hi); border-radius: 5px; padding: 0 8px; background: var(--well); }
+.resolution-field input { flex: 1; min-width: 0; width: 0; height: 100%; border: 0; padding: 0; font-family: var(--sans); color: var(--paper); background: transparent; }
+.resolution-field span { flex: none; white-space: nowrap; }
 .resolution-row span { font-size: var(--control-text); }
 .check-control { display: flex; align-items: center; gap: 9px; margin-bottom: 10px; font-size: var(--control-text); cursor: pointer; }
 .check-control input { accent-color: var(--accent); }
@@ -71,9 +73,10 @@ input[type=range] { width: 100%; height: 4px; accent-color: var(--accent); margi
 .adjust-buttons button:not(:disabled):hover { background: var(--hover); border-color: var(--accent); }
 .adjust-buttons span { font-size: 14px; margin-right: 5px; }
 .export-area { flex: none; margin-top: 16px; border-top: 1px solid var(--rule-hi); padding: 16px 4px 0; }
-.export-format { display: flex; align-items: center; justify-content: space-between; font-size: var(--control-text); color: var(--paper-dim); margin-bottom: 12px; }
 select { -webkit-appearance: none; appearance: none; border: 1px solid var(--rule-hi); background-color: var(--well); background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='m1 1 5 5 5-5' fill='none' stroke='%23a8aeb8' stroke-width='1.5'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 10px center; border-radius: 5px; min-height: 32px; padding: 5px 30px 5px 8px; font-family: var(--sans); font-size: var(--control-text, 12px); color: var(--paper); }
-.download { width: 100%; border: 1px solid var(--accent); background: var(--accent); border-radius: 7px; padding: 11px 14px; color: var(--ink); font-size: var(--control-text); text-align: left; font-weight: 600; }
+.export-download-row { display: flex; align-items: stretch; gap: 8px; }
+.export-download-row select { flex: none; width: 80px; }
+.download { flex: 1; min-width: 0; border: 1px solid var(--accent); background: var(--accent); border-radius: 7px; padding: 11px 14px; color: var(--ink); font-size: var(--control-text); text-align: left; font-weight: 600; }
 .download:not(:disabled):hover { background: #8ab9ff; }
 .download > span:first-child { font-size: 19px; margin-right: 9px; }
 .download .arrow { float: right; font-size: 15px; margin-top: 3px; }
@@ -150,8 +153,8 @@ footer { display: flex; justify-content: space-between; gap: 16px; padding-top: 
   .check-control, .grid-toggle { min-height: 44px; }
   .check-control input, .grid-toggle input { width: 18px; height: 18px; }
   input[type=range] { min-height: 44px; margin-bottom: 8px; }
-  .resolution-row { flex-wrap: wrap; }
-  .resolution-row input { width: 84px; }
+  .resolution-field { height: 44px; }
+  .resolution-field input[type=number] { min-height: 0; }
   select { font-family: var(--sans); }
   .upload { padding: 16px; }
   footer { font-size: 10px; }

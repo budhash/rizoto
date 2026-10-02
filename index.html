@@ -27,7 +27,7 @@
   <link rel="icon" href="icon.svg" type="image/svg+xml">
   <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"rizoto","url":"https://budhash.com/rizoto/","applicationCategory":"MultimediaApplication","operatingSystem":"Any (web browser)","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"description":"Resize and crop photos to any pixel dimensions, privately in your browser.","author":{"@type":"Person","name":"budhash","url":"https://github.com/budhash"},"@id":"https://budhash.com/rizoto/#app","image":"https://budhash.com/rizoto/social-preview.png","inLanguage":"en","isAccessibleForFree":true}</script>
   <link rel="stylesheet" href="theme.css?v=2645db8035d7">
-  <link rel="stylesheet" href="style.css?v=221667d722a6">
+  <link rel="stylesheet" href="style.css?v=3fb2f2828665">
 </head>
 <body>
   <main class="app">
@@ -52,15 +52,15 @@
         </section>
         <section><div class="section-heading"><h2>Dimensions</h2><span class="unit" id="dimension-unit-label">PX</span></div>
           <label class="control-row" for="operation"><span>Operation</span><select id="operation"><option value="crop">Crop to fit</option><option value="resize">Resize whole photo</option></select></label>
-          <label class="control-row" for="size-unit"><span>Measure in</span><select id="size-unit"><option value="px">Pixels</option><option value="in">Inches</option><option value="cm">Centimeters</option><option value="mm">Millimeters</option></select></label>
+          <label class="control-row" for="size-unit"><span>Measurement</span><select id="size-unit"><option value="px">Pixels</option><option value="in">Inches</option><option value="cm">Centimeters</option><option value="mm">Millimeters</option></select></label>
           <div class="dimensions"><label>Width<input id="width" type="number" value="630" min="1" max="8192" inputmode="numeric" aria-describedby="dimensions-error"></label><button id="swap" class="swap" aria-label="Swap width and height" title="Swap dimensions">⇄</button><label>Height<input id="height" type="number" value="810" min="1" max="8192" inputmode="numeric" aria-describedby="dimensions-error"></label></div>
           <p id="dimensions-error" class="field-error" role="status" hidden></p>
-          <div class="resolution-row"><label for="resolution">Resolution</label><input id="resolution" type="number" min="1" max="2400" step="1" value="300" aria-describedby="resolution-hint"><span>pixels/inch</span></div>
-          <p id="resolution-hint" class="hint">Print resolution is saved in PNG and JPG. WebP uses pixel dimensions.</p>
           <div class="presets"><button data-size="1080,1080">Square</button><button data-size="1080,1920">Story</button><button data-size="1920,1080">Landscape</button><select id="size-preset" aria-label="Custom sizes"><option value="">Custom</option><option value="inch-square">2 × 2 in</option><option value="mm-35-45">35 × 45 mm</option><option value="mm-50-70">50 × 70 mm</option></select></div>
           <p id="size-summary" class="hint">Any aspect ratio. No stretching.</p>
+          <div class="resolution-row"><label for="resolution">Resolution</label><div class="resolution-field"><input id="resolution" type="number" min="1" max="2400" step="1" value="300" aria-describedby="resolution-hint"><span>pixels/inch</span></div></div>
+          <p id="resolution-hint" class="hint">Print resolution is saved in PNG and JPG. WebP uses pixel dimensions.</p>
         </section>
-        <section><div class="section-heading"><h2 id="fit-heading">Find the perfect fit</h2></div>
+        <section><div class="section-heading"><h2 id="fit-heading">Fit</h2></div>
           <div id="crop-controls">
           <div class="slider-label"><label for="zoom">Zoom</label><output id="zoom-value">100%</output></div><input id="zoom" type="range" min="1" max="4" step="0.01" value="1" disabled>
           <div class="adjust-buttons"><button id="center" disabled><span>⊙</span> Center photo</button><button id="reset" disabled><span>↺</span> Reset crop</button></div>
@@ -69,7 +69,7 @@
           <div id="resize-controls" hidden><label class="check-control"><input id="proportional" type="checkbox" checked> Scale proportionally</label><label class="check-control"><input id="resample" type="checkbox" checked> Resample image</label><p id="resize-hint" class="hint">Keep the whole photo and preserve its proportions.</p></div>
         </section>
         </div>
-        <div class="export-area"><div class="export-format"><label for="format">Export as</label><select id="format"><option value="image/png">PNG</option><option value="image/jpeg">JPG</option><option id="webp-option" value="image/webp">WebP</option></select></div><button class="download" id="download" disabled><span>↓</span> Download photo <span class="arrow">↗</span></button><p id="export-info">630 × 810 px · 300 pixels/inch</p></div>
+        <div class="export-area"><div class="section-heading"><h2>Export</h2></div><div class="export-download-row"><button class="download" id="download" disabled><span>↓</span> Download photo <span class="arrow">↗</span></button><select id="format" aria-label="Export format"><option value="image/png">PNG</option><option value="image/jpeg">JPG</option><option id="webp-option" value="image/webp">WebP</option></select></div><p id="export-info">630 × 810 px · 300 pixels/inch</p></div>
       </aside>
       <section class="preview-panel panel" aria-label="Crop preview"><div class="preview-heading"><span><span class="live-dot"></span> LIVE PREVIEW</span><label class="grid-toggle"><input type="checkbox" id="grid-toggle"> Show grid</label></div>
         <div class="stage" id="stage"><div class="empty-state" id="empty-state"><span class="empty-icon">▧</span><h3>A fresh frame awaits.</h3><p>Add a photo to start shaping<br>something just right.</p><button id="choose-photo">Choose a photo <span>↗</span></button></div><div class="crop-frame" id="crop-frame"><canvas id="preview" aria-label="Photo crop. Drag to reposition, or use arrow keys." tabindex="0"></canvas><div class="grid" id="grid" hidden><i></i><i></i><i></i><i></i></div><span class="corner tl"></span><span class="corner tr"></span><span class="corner bl"></span><span class="corner br"></span></div></div>
@@ -83,6 +83,6 @@
   <script src="crop-math.js?v=86d4870b358a" defer></script>
   <script src="resize-math.js?v=f19ff88df257" defer></script>
   <script src="export-resolution.js?v=4724b4e7b5ff" defer></script>
-  <script src="app.js?v=aac38ddc2b30" defer></script>
+  <script src="app.js?v=b278de7d7cde" defer></script>
 </body>
 </html>
