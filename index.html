@@ -45,23 +45,23 @@
     <div class="workspace">
       <aside class="settings panel">
         <div class="settings-controls">
-        <section><div class="section-heading"><span class="step">01</span><h2>Choose your photo</h2></div>
+        <section><div class="section-heading"><h2>Photo</h2></div>
           <label class="upload" id="upload-zone" for="file" tabindex="0" role="button" aria-label="Choose or replace photo"><span class="upload-icon">↥</span><strong id="upload-title">Drop a photo here</strong><span id="upload-description">or click to browse your files</span><span class="file-types">JPG, PNG, WebP & more</span></label>
           <input type="file" id="file" accept="image/*" hidden>
           <p id="photo-info" class="photo-info" hidden></p>
         </section>
-        <section><div class="section-heading"><span class="step">02</span><h2>Set your dimensions</h2><span class="unit" id="dimension-unit-label">PX</span></div>
+        <section><div class="section-heading"><h2>Dimensions</h2><span class="unit" id="dimension-unit-label">PX</span></div>
           <label class="control-row" for="operation"><span>Operation</span><select id="operation"><option value="crop">Crop to fit</option><option value="resize">Resize whole photo</option></select></label>
           <label class="control-row" for="size-unit"><span>Measure in</span><select id="size-unit"><option value="px">Pixels</option><option value="in">Inches</option><option value="cm">Centimeters</option><option value="mm">Millimeters</option></select></label>
           <div class="dimensions"><label>Width<input id="width" type="number" value="630" min="1" max="8192" inputmode="numeric" aria-describedby="dimensions-error"></label><button id="swap" class="swap" aria-label="Swap width and height" title="Swap dimensions">⇄</button><label>Height<input id="height" type="number" value="810" min="1" max="8192" inputmode="numeric" aria-describedby="dimensions-error"></label></div>
           <p id="dimensions-error" class="field-error" role="status" hidden></p>
           <div class="resolution-row"><label for="resolution">Resolution</label><input id="resolution" type="number" min="1" max="2400" step="1" value="300" aria-describedby="resolution-hint"><span>pixels/inch</span></div>
           <p id="resolution-hint" class="hint">Print resolution is saved in PNG and JPG. WebP uses pixel dimensions.</p>
-          <div class="presets"><button data-size="1080,1080">Square</button><button data-size="1080,1920">Story</button><button data-size="1920,1080">Landscape</button><select id="passport-size" aria-label="Passport photo size" aria-describedby="passport-note"><option value="">Passport size…</option><optgroup label="Printed photo sizes"><option value="us">US · 2 × 2 in</option><option value="uk">UK · 35 × 45 mm</option><option value="ca">Canada · 50 × 70 mm</option></optgroup></select></div>
+          <div class="presets"><button data-size="1080,1080">Square</button><button data-size="1080,1920">Story</button><button data-size="1920,1080">Landscape</button><select id="passport-size" aria-label="Sizes" aria-describedby="passport-note"><option value="">Sizes</option><optgroup label="Printed photo sizes"><option value="us">US · 2 × 2 in</option><option value="uk">UK · 35 × 45 mm</option><option value="ca">Canada · 50 × 70 mm</option></optgroup></select></div>
           <p id="passport-note" class="hint" hidden><span id="passport-details"></span> <a id="passport-source" target="_blank" rel="noopener">Official photo rules ↗</a></p>
           <p id="size-summary" class="hint">Any aspect ratio. No stretching.</p>
         </section>
-        <section><div class="section-heading"><span class="step">03</span><h2 id="fit-heading">Find the perfect fit</h2></div>
+        <section><div class="section-heading"><h2 id="fit-heading">Find the perfect fit</h2></div>
           <div id="crop-controls">
           <div class="slider-label"><label for="zoom">Zoom</label><output id="zoom-value">100%</output></div><input id="zoom" type="range" min="1" max="4" step="0.01" value="1" disabled>
           <div class="adjust-buttons"><button id="center" disabled><span>⊙</span> Center photo</button><button id="reset" disabled><span>↺</span> Reset crop</button></div>
