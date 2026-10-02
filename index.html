@@ -27,7 +27,7 @@
   <link rel="icon" href="icon.svg" type="image/svg+xml">
   <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"rizoto","url":"https://budhash.com/rizoto/","applicationCategory":"MultimediaApplication","operatingSystem":"Any (web browser)","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"description":"Resize and crop photos to any pixel dimensions, privately in your browser.","author":{"@type":"Person","name":"budhash","url":"https://github.com/budhash"},"@id":"https://budhash.com/rizoto/#app","image":"https://budhash.com/rizoto/social-preview.png","inLanguage":"en","isAccessibleForFree":true}</script>
   <link rel="stylesheet" href="theme.css?v=2645db8035d7">
-  <link rel="stylesheet" href="style.css?v=3fb2f2828665">
+  <link rel="stylesheet" href="style.css?v=64d499fa430e">
 </head>
 <body>
   <main class="app">
@@ -57,7 +57,7 @@
           <p id="dimensions-error" class="field-error" role="status" hidden></p>
           <div class="presets"><button data-size="1080,1080">Square</button><button data-size="1080,1920">Story</button><button data-size="1920,1080">Landscape</button><select id="size-preset" aria-label="Custom sizes"><option value="">Custom</option><option value="inch-square">2 × 2 in</option><option value="mm-35-45">35 × 45 mm</option><option value="mm-50-70">50 × 70 mm</option></select></div>
           <p id="size-summary" class="hint">Any aspect ratio. No stretching.</p>
-          <div class="resolution-row"><label for="resolution">Resolution</label><div class="resolution-field"><input id="resolution" type="number" min="1" max="2400" step="1" value="300" aria-describedby="resolution-hint"><span>pixels/inch</span></div></div>
+          <div class="resolution-row"><label for="resolution">Resolution (pix/in)</label><div class="resolution-field"><input id="resolution" type="number" min="1" max="2400" step="1" value="300" aria-describedby="resolution-hint"></div></div>
           <p id="resolution-hint" class="hint">Print resolution is saved in PNG and JPG. WebP uses pixel dimensions.</p>
         </section>
         <section><div class="section-heading"><h2 id="fit-heading">Fit</h2></div>
