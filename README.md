@@ -49,7 +49,7 @@ npm run check
 
 ## Design
 
-`theme.css` is vendored from the canonical budhash.com theme. Keep it in sync with `../budhash/theme.css`. Page layout and cropper-specific styles live in `style.css`. Shared colors, system fonts, display headings, labels, panels, and pills use the same design tokens as the other tools. The shell follows gomanize’s 1720px/94vw container and compact header, with a GitHub icon at the upper right. The desktop workspace fills available viewport space; the export controls remain fixed in the sidebar while adjustment controls can scroll on shorter screens. Mobile uses stacked panels.
+`theme.css` is vendored from the canonical budhash.com theme. Keep it in sync with `../budhash/theme.css`. Page layout and cropper-specific styles live in `style.css`. Shared colors, system fonts, display headings, labels, panels, and pills use the same design tokens as the other tools. The shell follows gomanize’s 1720px/94vw container and compact header, with a GitHub icon at the upper right. The desktop workspace fills available viewport space and grows with its controls on shorter screens, using page scrolling so settings stay visible. The empty-state prompt is centered in the preview stage independently of the crop aspect ratio. Select controls use a shared arrow instead of platform-specific decoration. Mobile uses stacked panels.
 
 ## Deployment
 
