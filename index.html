@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Rizoto — Free photo resizer & cropper | budhash</title>
+  <meta name="description" content="Resize and crop photos to any pixel dimensions. Drag, zoom, and download exact-size PNG, JPG, or WebP images. Free, private, and entirely in your browser.">
+  <link rel="canonical" href="https://budhash.com/rizoto/">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://budhash.com/rizoto/">
+  <meta property="og:title" content="Rizoto — Your photo. Any frame.">
+  <meta name="keywords" content="rizoto, resize photo, photo cropper, image resizer, exact dimensions, private, free">
+  <meta property="og:description" content="A free, private photo resizer and cropper. Choose any dimensions, compose your crop, and download.">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Rizoto — Free photo resizer & cropper">
+  <meta name="twitter:description" content="Crop photos to any size, entirely in your browser.">
+  <meta name="theme-color" content="#6ea8fe">
+  <link rel="icon" href="icon.svg" type="image/svg+xml">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"Rizoto","url":"https://budhash.com/rizoto/","applicationCategory":"MultimediaApplication","operatingSystem":"Any (web browser)","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"description":"Resize and crop photos to any pixel dimensions, privately in your browser.","author":{"@type":"Person","name":"budhash","url":"https://github.com/budhash"}}</script>
+  <link rel="stylesheet" href="theme.css">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main class="app">
+    <header class="tool-header">
+      <nav class="top-links" aria-label="Main navigation">
+        <a class="navlink" href="https://budhash.com/">home</a>
+        <button class="navlink" id="about-open" type="button">about</button>
+      </nav>
+      <p class="eyebrow">photos · resize · reframe</p>
+      <h1>rizoto<span class="dot">.</span></h1>
+      <p class="subtitle">Your photo. Any frame. Pick a size, find your composition, and make it fit.</p>
+      <div class="tool-meta"><span class="pill live">Local &amp; private</span><span class="tag">No uploads</span><span class="tag">Exact-size export</span></div>
+    </header>
+    <div class="workspace panel">
+      <aside class="settings">
+        <section><div class="section-heading"><span class="step">01</span><h2>Choose your photo</h2></div>
+          <label class="upload" id="upload-zone" for="file" tabindex="0" role="button" aria-label="Choose or replace photo"><span class="upload-icon">↥</span><strong id="upload-title">Drop a photo here</strong><span id="upload-description">or click to browse your files</span><span class="file-types">JPG, PNG, WebP & more</span></label>
+          <input type="file" id="file" accept="image/*" hidden>
+          <p id="photo-info" class="photo-info" hidden></p>
+        </section>
+        <section><div class="section-heading"><span class="step">02</span><h2>Set your dimensions</h2><span class="unit">PX</span></div>
+          <div class="dimensions"><label>Width<input id="width" type="number" value="630" min="1" max="8192" inputmode="numeric" aria-describedby="dimensions-error"></label><button id="swap" class="swap" aria-label="Swap width and height" title="Swap dimensions">⇄</button><label>Height<input id="height" type="number" value="810" min="1" max="8192" inputmode="numeric" aria-describedby="dimensions-error"></label></div>
+          <p id="dimensions-error" class="field-error" role="status" hidden></p>
+          <div class="presets"><button data-size="630,810" class="active">630 × 810</button><button data-size="1080,1080">Square</button><button data-size="1080,1920">Story</button><button data-size="1920,1080">Landscape</button></div>
+          <p class="hint">Any aspect ratio. No stretching.</p>
+        </section>
+        <section><div class="section-heading"><span class="step">03</span><h2>Find the perfect fit</h2></div>
+          <div class="slider-label"><label for="zoom">Zoom</label><output id="zoom-value">100%</output></div><input id="zoom" type="range" min="1" max="4" step="0.01" value="1" disabled>
+          <div class="adjust-buttons"><button id="center" disabled><span>⊙</span> Center photo</button><button id="reset" disabled><span>↺</span> Reset crop</button></div>
+          <p class="hint">Drag your photo in the preview to reposition it.</p>
+        </section>
+        <div class="export-area"><div class="export-format"><label for="format">Export as</label><select id="format"><option value="image/png">PNG</option><option value="image/jpeg">JPG</option><option value="image/webp">WebP</option></select></div><button class="download" id="download" disabled><span>↓</span> Download photo <span class="arrow">↗</span></button><p id="export-info">630 × 810 px · Full-resolution export</p></div>
+      </aside>
+      <section class="preview-panel" aria-label="Crop preview"><div class="preview-heading"><span><span class="live-dot"></span> LIVE PREVIEW</span><label class="grid-toggle"><input type="checkbox" id="grid-toggle"> Show grid</label></div>
+        <div class="stage" id="stage"><div class="crop-frame" id="crop-frame"><canvas id="preview" aria-label="Photo crop. Drag to reposition, or use arrow keys." tabindex="0"></canvas><div class="empty-state" id="empty-state"><span class="empty-icon">▧</span><h3>A fresh frame awaits.</h3><p>Add a photo to start shaping<br>something just right.</p><button id="choose-photo">Choose a photo <span>↗</span></button></div><div class="grid" id="grid" hidden><i></i><i></i><i></i><i></i></div><span class="corner tl"></span><span class="corner tr"></span><span class="corner bl"></span><span class="corner br"></span></div></div>
+        <div class="preview-footer"><span id="preview-size">630 <span>×</span> 810 <small>PX</small></span><span id="preview-tip">Your canvas, your composition.</span></div>
+      </section>
+    </div>
+    <footer><span>Built by <a href="https://budhash.com/">budhash</a>.</span><span>Resize + photo. A perfect fit.</span></footer>
+    <p id="status" role="status" aria-live="polite"></p>
+    <dialog id="about" class="about"><div class="about-heading"><h2>About Rizoto</h2><button id="about-close" aria-label="Close About">✕</button></div><p><strong>Rizoto</strong> (resize + photo) gives any photo a new frame. Enter your output dimensions, then drag and zoom to find the perfect crop. Download an exact-size PNG, JPG, or WebP.</p><h3>Your photos stay yours</h3><p>Photos are processed in your browser. They are never uploaded, stored on a server, or shared. There are no accounts, analytics, or tracking scripts.</p><h3>A few useful details</h3><p>Use arrow keys to move your photo; hold Shift for bigger steps. Zoom starts at the minimum needed to fill your frame. Small photos can be enlarged, but enlarging cannot add detail. JPG exports use white behind transparent areas.</p><p>Supports 1–8192 pixels per side, up to 32 megapixels. Your browser must support the input image format; JPG, PNG, and WebP are good choices.</p><p><a href="https://budhash.com/">More tools by budhash ↗</a></p></dialog>
+  </main>
+  <script src="crop-math.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
