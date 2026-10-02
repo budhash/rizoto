@@ -223,7 +223,7 @@ canvas.addEventListener('keydown', e => {
   if (e.key === 'ArrowDown') state.y += amount;
   render();
 });
-$('download').addEventListener('click', () => {
+$('download').addEventListener('click', async () => {
   if (!state.image || $('download').disabled) return;
   const output = document.createElement('canvas'); output.width = state.width; output.height = state.height;
   const snapshot = { width: state.width, height: state.height, name: state.name, ppi: state.ppi };
@@ -232,15 +232,43 @@ $('download').addEventListener('click', () => {
   context.imageSmoothingQuality = 'high';
   if (state.mode === 'resize') context.drawImage(state.image, 0, 0, output.width, output.height);
   else { const s = scale(); context.drawImage(state.image, state.x, state.y, state.image.naturalWidth * s, state.image.naturalHeight * s); }
+  let fileHandle = null;
+  if (typeof window.showSaveFilePicker === 'function') {
+    const extension = { 'image/png': 'png', 'image/jpeg': 'jpg', 'image/webp': 'webp' }[type];
+    try {
+      // Open during the click's user activation, before asynchronous encoding.
+      fileHandle = await window.showSaveFilePicker({
+        suggestedName: `${snapshot.name}-${snapshot.width}x${snapshot.height}.${extension}`,
+        types: [{ description: `${extension.toUpperCase()} image`, accept: { [type]: [`.${extension}`] } }]
+      });
+    } catch (error) {
+      if (error.name !== 'AbortError') notice('The save dialog could not be opened. Please try again.');
+      return;
+    }
+  }
   output.toBlob(async blob => {
     if (!blob) { notice('The photo could not be exported. Try smaller dimensions.'); return; }
     try {
       const resolved = await RizotoDensity.withResolution(blob, snapshot.ppi);
-      const url = URL.createObjectURL(resolved); const link = document.createElement('a');
-      const ext = { 'image/png': 'png', 'image/jpeg': 'jpg', 'image/webp': 'webp' }[blob.type] || 'png';
-      link.href = url; link.download = `${snapshot.name}-${snapshot.width}x${snapshot.height}.${ext}`;
-      link.click(); setTimeout(() => URL.revokeObjectURL(url), 1000);
-      notice(`Downloaded ${snapshot.width} × ${snapshot.height} photo.`);
+      if (fileHandle) {
+        let writable;
+        try {
+          writable = await fileHandle.createWritable();
+          await writable.write(resolved);
+          await writable.close();
+        } catch {
+          if (writable) await writable.abort().catch(() => {});
+          notice('The photo could not be saved to that location. Please try again.');
+          return;
+        }
+      } else {
+        // Browsers without a save picker use their normal download behavior.
+        const url = URL.createObjectURL(resolved); const link = document.createElement('a');
+        const ext = { 'image/png': 'png', 'image/jpeg': 'jpg', 'image/webp': 'webp' }[blob.type] || 'png';
+        link.href = url; link.download = `${snapshot.name}-${snapshot.width}x${snapshot.height}.${ext}`;
+        link.click(); setTimeout(() => URL.revokeObjectURL(url), 1000);
+      }
+      notice(`${fileHandle ? 'Saved' : 'Downloaded'} ${snapshot.width} × ${snapshot.height} photo.`);
     } catch { notice('The print resolution could not be saved. Please try again.'); }
   }, type, 0.95);
 });

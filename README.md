@@ -22,6 +22,10 @@ Sizes can be entered in pixels, inches, centimeters, or millimeters. Physical di
 
 With **Resample image** off, output pixel dimensions remain equal to the original image. Changes to resolution or physical size affect print size only. Print-only mode uses PNG/JPG; choosing it from pixel units switches the controls to inches. Saving still encodes the image, so this is not a byte-for-byte copy of the source file.
 
+## Saving exports
+
+Download photo opens a Save As picker in browsers that support `showSaveFilePicker`, with the selected format and suggested filename. Pick a filename and location; cancelling does not save or start a fallback download. Print resolution is encoded before the selected file is written. Browsers without this API use normal downloads; their download settings control whether a location prompt appears.
+
 ## Mobile
 
 Below 640px, the editor uses stacked panels with no nested adjustment-panel scrolling. Photo positioning uses pointer events for touch dragging; zoom has a touch-sized slider. Form controls use 16px text and 44px targets to reduce iPhone focus zoom and make inputs easier to tap. Mobile visual/device testing is manual; a physical-phone compatibility check has not been performed in this release.

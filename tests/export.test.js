@@ -253,3 +253,50 @@ test('WebMCP export honors invalid manual settings and resampling-off WebP restr
   elements.get('resample').handlers.change({ target: elements.get('resample') });
   assert.equal((await tools.get('rizoto_prepare_export').execute({ format: 'webp' })).ok, false);
 });
+
+test('Save As opens before encoding and writes the snapshot with resolution to the chosen handle', async () => {
+  const { elements, created, context, densities } = appHarness();
+  await vm.runInContext("loadPhoto({type:'image/png',name:'portrait.png'})", context);
+  let pickerOptions, resolvePicker, saved, closed = false;
+  context.window.showSaveFilePicker = options => {
+    pickerOptions = options;
+    return new Promise(resolve => { resolvePicker = resolve; });
+  };
+  const pending = elements.get('download').handlers.click();
+  assert.equal(pickerOptions.suggestedName, 'portrait-630x810.png');
+  assert.equal(pickerOptions.types[0].accept['image/png'][0], '.png');
+  const output = created.find(el => el.tag === 'canvas');
+  assert.equal(output.encode, undefined);
+  elements.get('width').value = '1080'; elements.get('width').handlers.input();
+  elements.get('resolution').value = '144'; elements.get('resolution').handlers.input();
+  resolvePicker({ async createWritable() { return { async write(blob) { saved = blob; }, async close() { closed = true; } }; } });
+  await pending;
+  await output.encode();
+  assert.equal(output.width, 630); assert.equal(output.height, 810);
+  assert.equal(saved.type, 'image/png'); assert.equal(closed, true);
+  assert.deepEqual(densities, [300]);
+  assert.equal(created.some(el => el.tag === 'a'), false);
+});
+
+test('cancelling Save As does not encode, write or trigger a fallback download', async () => {
+  const { elements, created, context } = appHarness();
+  await vm.runInContext("loadPhoto({type:'image/png',name:'portrait.png'})", context);
+  context.window.showSaveFilePicker = async () => { throw Object.assign(new Error('Cancelled'), { name: 'AbortError' }); };
+  await elements.get('download').handlers.click();
+  assert.equal(created.find(el => el.tag === 'canvas').encode, undefined);
+  assert.equal(created.some(el => el.tag === 'a'), false);
+});
+
+test('failed file writes abort the stream and report a save error without downloading', async () => {
+  const { elements, created, context } = appHarness();
+  await vm.runInContext("loadPhoto({type:'image/png',name:'portrait.png'})", context);
+  let aborted = false;
+  context.window.showSaveFilePicker = async () => ({ async createWritable() { return {
+    async write() { throw new Error('Disk full'); }, async close() {}, async abort() { aborted = true; }
+  }; } });
+  await elements.get('download').handlers.click();
+  await created.find(el => el.tag === 'canvas').encode();
+  assert.equal(aborted, true);
+  assert.match(elements.get('status').textContent, /could not be saved to that location/);
+  assert.equal(created.some(el => el.tag === 'a'), false);
+});
