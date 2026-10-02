@@ -1,4 +1,4 @@
-# Rizoto
+# rizoto
 
 **Resize + photo.** A private, browser-based photo resizer and cropper at **https://budhash.com/rizoto/**.
 
@@ -31,6 +31,12 @@ npm run check
 
 This folder is the independent **`budhash/rizoto`** repository. GitHub Pages serves static files from `main` at `/` (root). Use a feature branch and PR for updates.
 
-The `budhash/budhash.github.io` portfolio owns the `budhash.com` custom domain, so project Pages are served at `https://budhash.com/rizoto/`. Do not set a separate custom domain or add a `CNAME` here. The portfolio repository contains only Rizoto's card, sitemap entry, and a redirect from the former `/frame/` URL.
+The `budhash/budhash.github.io` portfolio owns the `budhash.com` custom domain, so project Pages are served at `https://budhash.com/rizoto/`. Do not set a separate custom domain or add a `CNAME` here. The portfolio repository contains only rizoto's card and sitemap entry.
 
 The repository and deployed website are public. Photos are never uploaded. There are no external fonts, analytics, tracking scripts, or runtime dependencies.
+
+## Search and sharing
+
+The page includes a descriptive title and meta description, an HTTPS canonical URL, visible HTML describing the tool, WebApplication JSON-LD, and Open Graph / Twitter metadata with a local 1200 × 630 preview image. JavaScript loads with `defer`; the page’s descriptive content is available without executing it.
+
+The central `https://budhash.com/robots.txt` allows crawling and points to `https://budhash.com/sitemap.xml`, which includes the canonical rizoto URL. A `robots.txt` inside this project path would not control domain crawling. Search Console indexing requests or sitemap submissions require the site owner’s Search Console access. These technical foundations do not guarantee indexing, rankings, or rich results.

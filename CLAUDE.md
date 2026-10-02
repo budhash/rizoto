@@ -1,4 +1,4 @@
-# Rizoto
+# rizoto
 
 Independent static photo resizer and cropper for budhash.com. Local directory: `rizoto`; GitHub repository: `budhash/rizoto`; production URL: `https://budhash.com/rizoto/`.
 
@@ -9,4 +9,4 @@ Independent static photo resizer and cropper for budhash.com. Local directory: `
 - Validate changes with `npm test` and `npm run check`. No install is needed.
 - Work on a feature branch and open a PR, rather than committing directly to `main`.
 - GitHub Pages deploys from `main`, repository root. Never add a `CNAME` or project-level custom domain; the portfolio user site owns budhash.com.
-- The portfolio repository should contain only the tool card, sitemap entry, and old-URL redirect. Do not copy the app back into it.
+- The portfolio repository should contain only the tool card and sitemap entry. Do not copy the app back into it.
