@@ -250,3 +250,63 @@ const about = $('about');
 $('about-open').addEventListener('click', () => about.showModal());
 $('about-close').addEventListener('click', () => about.close());
 about.addEventListener('click', e => { if (e.target === about && (e.clientX < about.getBoundingClientRect().left || e.clientX > about.getBoundingClientRect().right || e.clientY < about.getBoundingClientRect().top || e.clientY > about.getBoundingClientRect().bottom)) about.close(); });
+
+// WebMCP shares the editor's state and rendering without exposing photo content.
+function agentState() {
+  let crop = null;
+  if (state.image && state.mode === 'crop') {
+    const s = scale();
+    const rangeX = state.image.naturalWidth * s - state.width;
+    const rangeY = state.image.naturalHeight * s - state.height;
+    crop = { zoom: state.zoom, horizontal: rangeX > 0 ? -state.x / rangeX : 0.5, vertical: rangeY > 0 ? -state.y / rangeY : 0.5 };
+  }
+  return {
+    image: state.image ? { width: state.image.naturalWidth, height: state.image.naturalHeight } : null,
+    output: { width: state.width, height: state.height, unit: state.unit, ppi: state.ppi, mode: state.mode, proportional: state.proportional, resample: state.resample, format: { 'image/png': 'png', 'image/jpeg': 'jpg', 'image/webp': 'webp' }[$('format').value] },
+    crop, settingsValid: $('dimensions-error').hidden, exportReady: Boolean(state.image && !$('download').disabled)
+  };
+}
+function requireAgentImage() {
+  if (!state.image) throw Object.assign(new Error('Choose a photo in rizoto first.'), { code: 'image_required' });
+}
+function requireAgentSettings() {
+  requireAgentImage();
+  if (!$('dimensions-error').hidden) throw new Error('Correct the invalid dimensions or resolution before adjusting the crop or preparing export.');
+}
+RizotoWebMCP.register(document, {
+  getState: agentState,
+  setOutput(input) {
+    requireAgentImage();
+    const { unit = 'px', mode = 'crop', ppi = state.ppi, proportional = true } = input;
+    let width = RizotoSize.toPixels(input.width, unit, ppi);
+    let height = RizotoSize.toPixels(input.height, unit, ppi);
+    if (mode === 'resize' && proportional) ({ width, height } = RizotoSize.proportional(width, height, state.image.naturalWidth / state.image.naturalHeight, 'width'));
+    if (!RizotoSize.validResolution(ppi) || !RizotoCrop.validDimensions(width, height)) throw new Error('Use whole pixel dimensions from 1–8192 per side, up to 32 megapixels, and 1–2400 pixels/inch.');
+    state.mode = mode; state.unit = unit; state.proportional = proportional; state.resample = true;
+    // Validate before committing any state; write converted pixels without rounding display units.
+    $('width').value = width; $('height').value = height; $('resolution').value = ppi;
+    state.unit = 'px'; updateDimensions(); state.unit = unit;
+    writeDimensionFields(); syncModeUI();
+    notice('Output settings updated. Review your preview.');
+    return agentState();
+  },
+  setCrop(input) {
+    requireAgentSettings();
+    if (state.mode !== 'crop') throw new Error('Choose crop mode with rizoto_set_output before adjusting the crop.');
+    if (input.zoom !== undefined) setZoom(input.zoom);
+    const s = scale();
+    if (input.horizontal !== undefined) state.x = -input.horizontal * Math.max(0, state.image.naturalWidth * s - state.width);
+    if (input.vertical !== undefined) state.y = -input.vertical * Math.max(0, state.image.naturalHeight * s - state.height);
+    render();
+    notice('Crop updated. Review your preview.');
+    return agentState();
+  },
+  prepareExport({ format }) {
+    requireAgentSettings();
+    if (metadataOnly() && format === 'webp') throw new Error('Choose PNG or JPG to preserve print resolution without resampling.');
+    $('format').value = { png: 'image/png', jpg: 'image/jpeg', webp: 'image/webp' }[format];
+    syncModeUI(); updateDimensions('unit');
+    notice('Export ready. Review the preview and click Download photo.');
+    return agentState();
+  }
+}).catch(() => {}); // Experimental browser support must never prevent normal editing.

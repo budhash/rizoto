@@ -6,7 +6,7 @@ const vm = require('node:vm');
 
 // Exercise the browser controller with a minimal DOM and canvas test double.
 // The blob callback stays pending so edits during encoding can be tested.
-function appHarness(imageWidth = 600, imageHeight = 600) {
+function appHarness(imageWidth = 600, imageHeight = 600, modelContext) {
   const elements = new Map();
   const created = [];
   const densities = [];
@@ -33,7 +33,8 @@ function appHarness(imageWidth = 600, imageHeight = 600) {
   elements.get('proportional').checked = true; elements.get('resample').checked = true;
   elements.get('stage').clientWidth = 700; elements.get('stage').clientHeight = 550;
   const context = vm.createContext({
-    setTimeout() {}, clearTimeout() {},
+    setTimeout() {}, clearTimeout() {}, AbortController,
+    RizotoWebMCP: require('../webmcp'),
     RizotoCrop: require('../crop-math'),
     RizotoSize: require('../resize-math'),
     RizotoDensity: { async withResolution(blob, ppi) { densities.push(ppi); return blob; } },
@@ -43,6 +44,7 @@ function appHarness(imageWidth = 600, imageHeight = 600) {
     Image: class { constructor() { this.naturalWidth = imageWidth; this.naturalHeight = imageHeight; } async decode() {} },
     window: { devicePixelRatio: 1, addEventListener() {} },
     document: {
+      modelContext,
       getElementById(id) { return elements.get(id); }, querySelectorAll() { return []; },
       createElement(tag) { const el = element(); el.tag = tag; created.push(el); return el; }
     }
@@ -181,4 +183,73 @@ test('invalid resolution prevents exporting a mislabeled image', async () => {
   elements.get('resolution').value = '0'; elements.get('resolution').handlers.input();
   assert.equal(elements.get('download').disabled, true);
   assert.match(elements.get('dimensions-error').textContent, /resolution/);
+});
+
+async function agentHarness(width = 600, height = 600) {
+  const tools = new Map();
+  const harness = appHarness(width, height, { registerTool(tool) { tools.set(tool.name, tool); } });
+  await new Promise(resolve => setImmediate(resolve));
+  return { ...harness, tools };
+}
+
+test('WebMCP metadata excludes filenames and mutation requires a selected photo', async () => {
+  const { tools, context } = await agentHarness();
+  const before = await tools.get('rizoto_get_state').execute({});
+  assert.equal(before.state.image, null);
+  assert.equal((await tools.get('rizoto_set_output').execute({ width: 630, height: 810 })).error.code, 'image_required');
+  await vm.runInContext("loadPhoto({type:'image/png',name:'private-name.png'})", context);
+  const after = await tools.get('rizoto_get_state').execute({});
+  assert.equal(after.state.image.width, 600);
+  assert.equal(JSON.stringify(after).includes('private-name'), false);
+});
+
+test('WebMCP sets physical output dimensions and keeps controls and preview in sync', async () => {
+  const { tools, context, elements } = await agentHarness();
+  await vm.runInContext("loadPhoto({type:'image/png',name:'photo.png'})", context);
+  const result = await tools.get('rizoto_set_output').execute({ width: 35, height: 45, unit: 'mm', ppi: 300 });
+  assert.equal(result.ok, true); assert.equal(result.state.output.width, 413); assert.equal(result.state.output.height, 531);
+  assert.equal(elements.get('size-unit').value, 'mm'); assert.equal(elements.get('resolution').value, 300);
+  assert.equal(elements.get('download').disabled, false);
+});
+
+test('WebMCP proportional resizing reports the derived height and rejected edits do not mutate state', async () => {
+  const { tools, context, elements } = await agentHarness(1200, 800);
+  await vm.runInContext("loadPhoto({type:'image/png',name:'photo.png'})", context);
+  const resize = await tools.get('rizoto_set_output').execute({ width: 900, height: 900, mode: 'resize' });
+  assert.equal(resize.state.output.height, 600); assert.equal(elements.get('height').value, '600');
+  const before = JSON.stringify((await tools.get('rizoto_get_state').execute({})).state);
+  assert.equal((await tools.get('rizoto_set_output').execute({ width: 8192, height: 8192 })).ok, false);
+  assert.equal(JSON.stringify((await tools.get('rizoto_get_state').execute({})).state), before);
+  assert.equal((await tools.get('rizoto_set_crop').execute({ zoom: 2 })).ok, false);
+});
+
+test('WebMCP crop positioning clamps the photo to normalized edge positions', async () => {
+  const { tools, context } = await agentHarness();
+  await vm.runInContext("loadPhoto({type:'image/png',name:'photo.png'})", context);
+  const crop = await tools.get('rizoto_set_crop').execute({ zoom: 2, horizontal: 1, vertical: 0 });
+  assert.equal(crop.state.crop.zoom, 2); assert.equal(crop.state.crop.horizontal, 1); assert.equal(crop.state.crop.vertical, 0);
+  assert.equal(vm.runInContext('state.x', context), -990);
+  assert.equal(Math.abs(vm.runInContext('state.y', context)), 0);
+});
+
+test('WebMCP prepares export without downloading or changing high-resolution pixel dimensions', async () => {
+  const { tools, context, created, elements } = await agentHarness();
+  await vm.runInContext("loadPhoto({type:'image/png',name:'photo.png'})", context);
+  await tools.get('rizoto_set_output').execute({ width: 631, height: 811, unit: 'px', ppi: 2400 });
+  change(elements, 'size-unit', 'mm');
+  const result = await tools.get('rizoto_prepare_export').execute({ format: 'jpg' });
+  assert.equal(result.state.output.width, 631); assert.equal(result.state.output.height, 811);
+  assert.equal(elements.get('format').value, 'image/jpeg');
+  assert.equal(created.length, 0); assert.match(result.nextStep, /Download photo/);
+});
+
+test('WebMCP export honors invalid manual settings and resampling-off WebP restriction', async () => {
+  const { tools, context, elements } = await agentHarness();
+  await vm.runInContext("loadPhoto({type:'image/png',name:'photo.png'})", context);
+  elements.get('width').value = '0'; elements.get('width').handlers.input();
+  assert.equal((await tools.get('rizoto_prepare_export').execute({ format: 'jpg' })).ok, false);
+  await tools.get('rizoto_set_output').execute({ width: 600, height: 600, mode: 'resize' });
+  elements.get('resample').checked = false;
+  elements.get('resample').handlers.change({ target: elements.get('resample') });
+  assert.equal((await tools.get('rizoto_prepare_export').execute({ format: 'webp' })).ok, false);
 });
