@@ -64,7 +64,6 @@ function writeDimensionFields() {
 function syncModeUI() {
   const resize = state.mode === 'resize';
   $('crop-controls').hidden = resize; $('resize-controls').hidden = !resize;
-  $('fit-heading').textContent = resize ? 'Resize options' : 'Find the perfect fit';
   $('operation').value = state.mode; $('size-unit').value = state.unit;
   $('dimension-unit-label').textContent = state.unit.toUpperCase();
   $('proportional').checked = state.proportional; $('resample').checked = state.resample;
