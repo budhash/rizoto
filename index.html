@@ -35,15 +35,16 @@
       <nav class="top-links" aria-label="Main navigation">
         <a class="navlink" href="https://budhash.com/">home</a>
         <button class="navlink" id="about-open" type="button">about</button>
-        <a class="navlink" href="https://github.com/budhash/rizoto" target="_blank" rel="noopener" aria-label="View rizoto source on GitHub">source ↗</a>
+        <a class="gh-link" href="https://github.com/budhash/rizoto" target="_blank" rel="noopener" aria-label="View rizoto source on GitHub" title="View source on GitHub"><svg viewBox="0 0 16 16" width="26" height="26" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0 0 16 8c0-4.42-3.58-8-8-8Z"></path></svg></a>
       </nav>
       <p class="eyebrow">photos · resize · reframe</p>
       <h1>rizoto<span class="dot">.</span></h1>
       <p class="subtitle">Resize and crop photos to exact pixel dimensions, without stretching. Drag and zoom to find your composition, then download a PNG, JPG, or WebP — privately in your browser.</p>
-      <div class="tool-meta"><span class="pill live">Local &amp; private</span><span class="tag">No uploads</span><span class="tag">Exact-size export</span></div>
     </header>
-    <div class="workspace panel">
-      <aside class="settings">
+    <div class="section-head"><span class="label">live</span><span class="section-rule"></span><span class="local-status">local · private</span></div>
+    <div class="workspace">
+      <aside class="settings panel">
+        <div class="settings-controls">
         <section><div class="section-heading"><span class="step">01</span><h2>Choose your photo</h2></div>
           <label class="upload" id="upload-zone" for="file" tabindex="0" role="button" aria-label="Choose or replace photo"><span class="upload-icon">↥</span><strong id="upload-title">Drop a photo here</strong><span id="upload-description">or click to browse your files</span><span class="file-types">JPG, PNG, WebP & more</span></label>
           <input type="file" id="file" accept="image/*" hidden>
@@ -60,9 +61,10 @@
           <div class="adjust-buttons"><button id="center" disabled><span>⊙</span> Center photo</button><button id="reset" disabled><span>↺</span> Reset crop</button></div>
           <p class="hint">Drag your photo in the preview to reposition it.</p>
         </section>
+        </div>
         <div class="export-area"><div class="export-format"><label for="format">Export as</label><select id="format"><option value="image/png">PNG</option><option value="image/jpeg">JPG</option><option value="image/webp">WebP</option></select></div><button class="download" id="download" disabled><span>↓</span> Download photo <span class="arrow">↗</span></button><p id="export-info">630 × 810 px · Full-resolution export</p></div>
       </aside>
-      <section class="preview-panel" aria-label="Crop preview"><div class="preview-heading"><span><span class="live-dot"></span> LIVE PREVIEW</span><label class="grid-toggle"><input type="checkbox" id="grid-toggle"> Show grid</label></div>
+      <section class="preview-panel panel" aria-label="Crop preview"><div class="preview-heading"><span><span class="live-dot"></span> LIVE PREVIEW</span><label class="grid-toggle"><input type="checkbox" id="grid-toggle"> Show grid</label></div>
         <div class="stage" id="stage"><div class="crop-frame" id="crop-frame"><canvas id="preview" aria-label="Photo crop. Drag to reposition, or use arrow keys." tabindex="0"></canvas><div class="empty-state" id="empty-state"><span class="empty-icon">▧</span><h3>A fresh frame awaits.</h3><p>Add a photo to start shaping<br>something just right.</p><button id="choose-photo">Choose a photo <span>↗</span></button></div><div class="grid" id="grid" hidden><i></i><i></i><i></i><i></i></div><span class="corner tl"></span><span class="corner tr"></span><span class="corner bl"></span><span class="corner br"></span></div></div>
         <div class="preview-footer"><span id="preview-size">630 <span>×</span> 810 <small>PX</small></span><span id="preview-tip">Your canvas, your composition.</span></div>
       </section>

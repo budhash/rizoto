@@ -39,7 +39,7 @@ function layout() {
   const styles = getComputedStyle(stage);
   const availableWidth = stage.clientWidth - parseFloat(styles.paddingLeft) - parseFloat(styles.paddingRight);
   const availableHeight = stage.clientHeight - parseFloat(styles.paddingTop) - parseFloat(styles.paddingBottom);
-  const factor = Math.min(availableWidth / state.width, availableHeight / state.height, 440 / state.width, 500 / state.height);
+  const factor = Math.min(availableWidth / state.width, availableHeight / state.height);
   $('crop-frame').style.width = `${Math.max(1, state.width * factor)}px`;
   $('crop-frame').style.height = `${Math.max(1, state.height * factor)}px`;
   render();
