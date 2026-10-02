@@ -32,6 +32,7 @@ test('JPEG updates JFIF resolution while leaving all other encoded bytes untouch
   assert.equal(output.readUInt16BE(14), 300); assert.equal(output.readUInt16BE(16), 300);
   assert.deepEqual(output.subarray(0, 13), jpg.subarray(0, 13));
   assert.deepEqual(output.subarray(18), jpg.subarray(18));
+  assert.equal(jpg.readUInt16BE(14), 96); // Source bytes are never mutated.
 });
 test('JPEG without an existing JFIF header gains a density header', () => {
   const withoutHeader = Buffer.concat([jpg.subarray(0, 2), jpg.subarray(20)]);
@@ -39,6 +40,24 @@ test('JPEG without an existing JFIF header gains a density header', () => {
   assert.equal(output.toString('ascii', 6, 11), 'JFIF\0');
   assert.equal(output.readUInt16BE(14), 144);
   assert.deepEqual(output.subarray(20), withoutHeader.subarray(2));
+});
+test('JPEG synchronizes existing EXIF resolution as well as JFIF density', () => {
+  const source = fs.readFileSync(path.join(__dirname, 'fixtures/resolution-exif.jpg'));
+  const output = Buffer.from(writeResolution(source, 'image/jpeg', 300));
+  const start = output.indexOf(Buffer.from('Exif\0\0')) + 6;
+  const little = output.toString('ascii', start, start + 2) === 'II';
+  const u16 = offset => little ? output.readUInt16LE(offset) : output.readUInt16BE(offset);
+  const u32 = offset => little ? output.readUInt32LE(offset) : output.readUInt32BE(offset);
+  const ifd = start + u32(start + 4), values = {};
+  for (let index = 0; index < u16(ifd); index++) {
+    const entry = ifd + 2 + index * 12, tag = u16(entry);
+    if (tag === 282 || tag === 283) { const position = start + u32(entry + 8); values[tag] = u32(position) / u32(position + 4); }
+    if (tag === 296) values[tag] = u16(entry + 8);
+  }
+  assert.deepEqual(values, { 282: 300, 283: 300, 296: 2 });
+  assert.equal(output.readUInt16BE(14), 300);
+  const scan = source.indexOf(Buffer.from([255, 218]));
+  assert.deepEqual(output.subarray(scan), source.subarray(scan));
 });
 test('blob metadata export keeps the format and unsupported WebP blobs unchanged', async () => {
   const result = await withResolution(new Blob([png], { type: 'image/png' }), 300);
