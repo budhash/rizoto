@@ -50,20 +50,27 @@
           <input type="file" id="file" accept="image/*" hidden>
           <p id="photo-info" class="photo-info" hidden></p>
         </section>
-        <section><div class="section-heading"><span class="step">02</span><h2>Set your dimensions</h2><span class="unit">PX</span></div>
+        <section><div class="section-heading"><span class="step">02</span><h2>Set your dimensions</h2><span class="unit" id="dimension-unit-label">PX</span></div>
+          <label class="control-row" for="operation"><span>Operation</span><select id="operation"><option value="crop">Crop to fit</option><option value="resize">Resize whole photo</option></select></label>
+          <label class="control-row" for="size-unit"><span>Measure in</span><select id="size-unit"><option value="px">Pixels</option><option value="in">Inches</option><option value="cm">Centimeters</option><option value="mm">Millimeters</option></select></label>
           <div class="dimensions"><label>Width<input id="width" type="number" value="630" min="1" max="8192" inputmode="numeric" aria-describedby="dimensions-error"></label><button id="swap" class="swap" aria-label="Swap width and height" title="Swap dimensions">⇄</button><label>Height<input id="height" type="number" value="810" min="1" max="8192" inputmode="numeric" aria-describedby="dimensions-error"></label></div>
           <p id="dimensions-error" class="field-error" role="status" hidden></p>
+          <div class="resolution-row"><label for="resolution">Resolution</label><input id="resolution" type="number" min="1" max="2400" step="1" value="300" aria-describedby="resolution-hint"><span>pixels/inch</span></div>
+          <p id="resolution-hint" class="hint">Print resolution is saved in PNG and JPG. WebP uses pixel dimensions.</p>
           <div class="presets"><button data-size="1080,1080">Square</button><button data-size="1080,1920">Story</button><button data-size="1920,1080">Landscape</button><select id="passport-size" aria-label="Passport photo size" aria-describedby="passport-note"><option value="">Passport size…</option><optgroup label="Printed photo sizes"><option value="us">US · 2 × 2 in</option><option value="uk">UK · 35 × 45 mm</option><option value="ca">Canada · 50 × 70 mm</option></optgroup></select></div>
           <p id="passport-note" class="hint" hidden><span id="passport-details"></span> <a id="passport-source" target="_blank" rel="noopener">Official photo rules ↗</a></p>
-          <p class="hint">Any aspect ratio. No stretching.</p>
+          <p id="size-summary" class="hint">Any aspect ratio. No stretching.</p>
         </section>
-        <section><div class="section-heading"><span class="step">03</span><h2>Find the perfect fit</h2></div>
+        <section><div class="section-heading"><span class="step">03</span><h2 id="fit-heading">Find the perfect fit</h2></div>
+          <div id="crop-controls">
           <div class="slider-label"><label for="zoom">Zoom</label><output id="zoom-value">100%</output></div><input id="zoom" type="range" min="1" max="4" step="0.01" value="1" disabled>
           <div class="adjust-buttons"><button id="center" disabled><span>⊙</span> Center photo</button><button id="reset" disabled><span>↺</span> Reset crop</button></div>
           <p class="hint">Drag your photo in the preview to reposition it.</p>
+          </div>
+          <div id="resize-controls" hidden><label class="check-control"><input id="proportional" type="checkbox" checked> Scale proportionally</label><label class="check-control"><input id="resample" type="checkbox" checked> Resample image</label><p id="resize-hint" class="hint">Keep the whole photo and preserve its proportions.</p></div>
         </section>
         </div>
-        <div class="export-area"><div class="export-format"><label for="format">Export as</label><select id="format"><option value="image/png">PNG</option><option value="image/jpeg">JPG</option><option value="image/webp">WebP</option></select></div><button class="download" id="download" disabled><span>↓</span> Download photo <span class="arrow">↗</span></button><p id="export-info">630 × 810 px · Full-resolution export</p></div>
+        <div class="export-area"><div class="export-format"><label for="format">Export as</label><select id="format"><option value="image/png">PNG</option><option value="image/jpeg">JPG</option><option id="webp-option" value="image/webp">WebP</option></select></div><button class="download" id="download" disabled><span>↓</span> Download photo <span class="arrow">↗</span></button><p id="export-info">630 × 810 px · 300 pixels/inch</p></div>
       </aside>
       <section class="preview-panel panel" aria-label="Crop preview"><div class="preview-heading"><span><span class="live-dot"></span> LIVE PREVIEW</span><label class="grid-toggle"><input type="checkbox" id="grid-toggle"> Show grid</label></div>
         <div class="stage" id="stage"><div class="crop-frame" id="crop-frame"><canvas id="preview" aria-label="Photo crop. Drag to reposition, or use arrow keys." tabindex="0"></canvas><div class="empty-state" id="empty-state"><span class="empty-icon">▧</span><h3>A fresh frame awaits.</h3><p>Add a photo to start shaping<br>something just right.</p><button id="choose-photo">Choose a photo <span>↗</span></button></div><div class="grid" id="grid" hidden><i></i><i></i><i></i><i></i></div><span class="corner tl"></span><span class="corner tr"></span><span class="corner bl"></span><span class="corner br"></span></div></div>
@@ -72,9 +79,11 @@
     </div>
     <footer><span>Built by <a href="https://budhash.com/">budhash</a>.</span><span>Resize + photo. A perfect fit.</span></footer>
     <p id="status" role="status" aria-live="polite"></p>
-    <dialog id="about" class="about"><div class="about-heading"><h2>About rizoto</h2><button id="about-close" aria-label="Close About">✕</button></div><p><strong>rizoto</strong> (resize + photo) gives any photo a new frame. Enter your output dimensions, then drag and zoom to find the perfect crop. Download an exact-size PNG, JPG, or WebP.</p><h3>Your photos stay yours</h3><p>Photos are processed in your browser. They are never uploaded, stored on a server, or shared. There are no accounts, analytics, or tracking scripts.</p><h3>A few useful details</h3><p>Use arrow keys to move your photo; hold Shift for bigger steps. Zoom starts at the minimum needed to fill your frame. Small photos can be enlarged, but enlarging cannot add detail. JPG exports use white behind transparent areas.</p><p>Supports 1–8192 pixels per side, up to 32 megapixels. Your browser must support the input image format; JPG, PNG, and WebP are good choices.</p><p><a href="https://github.com/budhash/rizoto" target="_blank" rel="noopener">View source ↗</a> · <a href="https://budhash.com/">More tools by budhash</a></p></dialog>
+    <dialog id="about" class="about"><div class="about-heading"><h2>About rizoto</h2><button id="about-close" aria-label="Close About">✕</button></div><p><strong>rizoto</strong> (resize + photo) gives any photo a new frame. Enter your output dimensions, then drag and zoom to find the perfect crop. Download an exact-size PNG, JPG, or WebP.</p><h3>Resize and print</h3><p>Choose Crop to fit for a new frame, or Resize whole photo to include the entire image. Scale proportionally keeps the original shape. Enter pixels, inches, centimeters, or millimeters and set a print resolution. With Resample image off, original pixel dimensions stay fixed while print size changes. PNG and JPG save print resolution; WebP exports pixel dimensions.</p><h3>Your photos stay yours</h3><p>Photos are processed in your browser. They are never uploaded, stored on a server, or shared. There are no accounts, analytics, or tracking scripts.</p><h3>A few useful details</h3><p>Use arrow keys to move your photo; hold Shift for bigger steps. Zoom starts at the minimum needed to fill your frame. Small photos can be enlarged, but enlarging cannot add detail. JPG exports use white behind transparent areas.</p><p>Supports 1–8192 pixels per side, up to 32 megapixels. Your browser must support the input image format; JPG, PNG, and WebP are good choices.</p><p><a href="https://github.com/budhash/rizoto" target="_blank" rel="noopener">View source ↗</a> · <a href="https://budhash.com/">More tools by budhash</a></p></dialog>
   </main>
   <script src="crop-math.js" defer></script>
+  <script src="resize-math.js" defer></script>
+  <script src="export-resolution.js" defer></script>
   <script src="app.js" defer></script>
 </body>
 </html>

@@ -14,6 +14,18 @@ python3 -m http.server 8000
 
 Then visit http://localhost:8000. Arrow keys move the photo; hold Shift for larger steps. The crop always covers the frame, preserving the photo's proportions without empty edges. Output sizes support 1–8192 pixels per side, with a 32-megapixel total limit. Small source photos can be enlarged, though enlarging cannot add detail. JPG exports use white behind transparent areas.
 
+## Resize and print controls
+
+Choose **Crop to fit** to fill a target frame while preserving the photo’s proportions, or **Resize whole photo** to retain the complete image. In resize mode, **Scale proportionally** links dimensions using the original photo’s aspect ratio. Turning it off allows independent width/height changes and can stretch the image.
+
+Sizes can be entered in pixels, inches, centimeters, or millimeters. Physical dimensions are converted to whole output pixels using the selected 1–2400 pixels/inch resolution. Changing the displayed unit preserves the current output pixels. PNG and JPG exports store the chosen print resolution (PNG pHYs / JPEG JFIF); WebP exports remain pixel-based.
+
+With **Resample image** off, output pixel dimensions remain equal to the original image. Changes to resolution or physical size affect print size only. Print-only mode uses PNG/JPG; choosing it from pixel units switches the controls to inches. Saving still encodes the image, so this is not a byte-for-byte copy of the source file.
+
+## Mobile
+
+Below 640px, the editor uses stacked panels with no nested adjustment-panel scrolling. Photo positioning uses pointer events for touch dragging; zoom has a touch-sized slider. Form controls use 16px text and 44px targets to reduce iPhone focus zoom and make inputs easier to tap. Mobile visual/device testing is manual; a physical-phone compatibility check has not been performed in this release.
+
 ## Passport size presets
 
 The final preset dropdown offers print-dimension references:
