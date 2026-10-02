@@ -41,6 +41,15 @@ h1 .dot { color: var(--accent); }
 .photo-info { font-family: var(--mono); font-size: 10px; color: var(--green); margin: 9px 0 0; overflow-wrap: anywhere; }
 .unit { margin-left: auto; font-family: var(--mono); font-size: 9px; color: var(--paper-dimmer); }
 .dimensions { display: flex; align-items: flex-end; gap: 11px; }
+.control-row { display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-bottom: 12px; font-size: 11px; color: var(--paper-dim); }
+.control-row select { max-width: 65%; }
+.resolution-row { display: flex; align-items: center; gap: 8px; margin-top: 12px; font-size: 10px; color: var(--paper-dim); }
+.resolution-row input { min-width: 0; width: 65px; border: 1px solid var(--rule-hi); border-radius: 5px; padding: 6px 8px; font-family: var(--mono); color: var(--paper); background: var(--well); }
+.resolution-row span { font-size: 9px; }
+.check-control { display: flex; align-items: center; gap: 9px; margin-bottom: 10px; font-size: 12px; cursor: pointer; }
+.check-control input { accent-color: var(--accent); }
+input:disabled { opacity: .5; }
+canvas.resize-preview { cursor: default; }
 .dimensions label { flex: 1; min-width: 0; font-family: var(--mono); font-size: 10px; color: var(--paper-dim); }
 .dimensions input { display: block; width: 100%; padding: 9px 11px; border: 1px solid var(--rule-hi); border-radius: 6px; margin-top: 6px; font-family: var(--mono); font-size: 16px; color: var(--paper); background: var(--well); appearance: textfield; }
 .dimensions input::-webkit-inner-spin-button { appearance: none; }
@@ -134,5 +143,17 @@ footer { display: flex; justify-content: space-between; gap: 16px; padding-top: 
   .settings-controls { overflow: visible; }
   .preview-footer { padding: 14px 20px; }
   .settings section + section { margin-top: 20px; padding-top: 20px; }
+  .navlink, .gh-link { min-height: 44px; min-width: 44px; display: inline-flex; align-items: center; justify-content: center; }
+  input:not([type=checkbox]):not([type=range]), select { font-size: 16px; min-height: 44px; }
+  .presets select { font-size: 16px; flex-basis: 100%; }
+  .presets button, .adjust-buttons button, .empty-state button { min-height: 44px; font-size: 12px; }
+  .check-control, .grid-toggle { min-height: 44px; }
+  .check-control input, .grid-toggle input { width: 18px; height: 18px; }
+  input[type=range] { min-height: 44px; margin-bottom: 8px; }
+  .resolution-row { flex-wrap: wrap; font-size: 12px; }
+  .resolution-row input { width: 84px; }
+  .control-row { font-size: 12px; }
+  select { font-family: var(--sans); }
+  .upload { padding: 16px; }
   footer { font-size: 10px; }
 }

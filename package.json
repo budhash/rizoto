@@ -1,10 +1,10 @@
 {
   "name": "rizoto",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "private": true,
   "description": "A private, static photo resizer and cropper for budhash.com",
   "scripts": {
     "test": "node --test tests/*.test.js",
-    "check": "node --check app.js && node --check crop-math.js"
+    "check": "node --check app.js && node --check crop-math.js && node --check resize-math.js && node --check export-resolution.js"
   }
 }
