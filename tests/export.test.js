@@ -77,28 +77,26 @@ test('invalid dimensions prevent export and show an actionable error', async () 
   assert.equal(created.length, 0);
 });
 
-test('passport choices produce the correct country-specific output dimensions', async () => {
+test('custom print sizes produce the expected output dimensions', async () => {
   const { elements, created, context } = appHarness();
   await vm.runInContext("loadPhoto({type:'image/png',name:'portrait.png'})", context);
-  for (const [id, width, height] of [['us', 600, 600], ['uk', 413, 531], ['ca', 591, 827]]) {
-    elements.get('passport-size').value = id;
-    elements.get('passport-size').handlers.change({ target: elements.get('passport-size') });
+  for (const [id, width, height] of [['inch-square', 600, 600], ['mm-35-45', 413, 531], ['mm-50-70', 591, 827]]) {
+    elements.get('size-preset').value = id;
+    elements.get('size-preset').handlers.change({ target: elements.get('size-preset') });
     assert.equal(Number(elements.get('width').value), width);
     assert.equal(Number(elements.get('height').value), height);
-    assert.equal(elements.get('passport-note').hidden, false);
     elements.get('download').handlers.click();
     const output = created.filter(el => el.tag === 'canvas').at(-1);
     assert.equal(output.width, width); assert.equal(output.height, height);
   }
 });
 
-test('manual changes clear a passport selection when its size no longer matches', () => {
+test('manual changes clear a custom-size selection when its size no longer matches', () => {
   const { elements } = appHarness();
-  elements.get('passport-size').value = 'uk';
-  elements.get('passport-size').handlers.change({ target: elements.get('passport-size') });
+  elements.get('size-preset').value = 'mm-35-45';
+  elements.get('size-preset').handlers.change({ target: elements.get('size-preset') });
   elements.get('width').value = '500'; elements.get('width').handlers.input();
-  assert.equal(elements.get('passport-size').value, '');
-  assert.equal(elements.get('passport-note').hidden, true);
+  assert.equal(elements.get('size-preset').value, '');
 });
 
 function change(elements, id, value) {
