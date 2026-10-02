@@ -6,6 +6,7 @@ Independent static photo resizer and cropper for budhash.com. Local directory: `
 - `theme.css` is an exact vendored copy of `../budhash/theme.css`. Use its shared tokens and primitives; keep cropper layout in `style.css`.
 - Photo data stays in browser memory. Do not introduce upload, analytics, or external-font requests.
 - Crop geometry lives in `crop-math.js`, size conversions in `resize-math.js`, PNG/JPEG print-resolution encoding in `export-resolution.js`, and browser controls/canvas export in `app.js`. Preserve original pixel dimensions when resampling is off; changing units alone must not change pixel dimensions.
+- After editing CSS or browser JavaScript, run `npm run version:assets` to refresh content hashes in the HTML asset URLs. This prevents mixed releases from browser caches.
 - Validate changes with `npm test` and `npm run check`. No install is needed.
 - Work on a feature branch and open a PR, rather than committing directly to `main`.
 - GitHub Pages deploys from `main`, repository root. Never add a `CNAME` or project-level custom domain; the portfolio user site owns budhash.com.
