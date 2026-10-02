@@ -2,12 +2,11 @@ const $ = id => document.getElementById(id);
 const canvas = $('preview');
 const ctx = canvas.getContext('2d');
 const state = { image: null, width: 630, height: 810, zoom: 1, x: 0, y: 0, name: 'photo', mode: 'crop', unit: 'px', ppi: 300, proportional: true, resample: true };
-// Physical print sizes converted to pixels at 300 pixels/inch.
-// These are dimension references, not a guarantee of passport acceptance.
-const passportPresets = {
-  us: { width: 600, height: 600, printSize: '2 × 2 in', source: 'https://travel.state.gov/en/passports/apply/help/photos.html' },
-  uk: { width: 413, height: 531, printSize: '35 × 45 mm', source: 'https://www.gov.uk/photos-for-passports/photo-requirements' },
-  ca: { width: 591, height: 827, printSize: '50 × 70 mm', source: 'https://www.canada.ca/en/immigration-refugees-citizenship/services/canadian-passports/photos.html' }
+// Physical print dimensions converted to pixels at 300 pixels/inch.
+const sizePresets = {
+  'inch-square': { width: 600, height: 600 },
+  'mm-35-45': { width: 413, height: 531 },
+  'mm-50-70': { width: 591, height: 827 }
 };
 let noticeTimer;
 function notice(message) {
@@ -102,14 +101,8 @@ function updateDimensions(changed = null) {
   }
   const validPpi = RizotoSize.validResolution(ppi);
   const valid = validPpi && RizotoCrop.validDimensions(width, height);
-  const passportId = valid && state.mode === 'crop' && ppi === 300 && Object.keys(passportPresets).find(id => passportPresets[id].width === width && passportPresets[id].height === height);
-  $('passport-size').value = passportId || '';
-  $('passport-note').hidden = !passportId;
-  if (passportId) {
-    const preset = passportPresets[passportId];
-    $('passport-details').textContent = `${preset.printSize} at 300 px/in. Set this size when printing. Dimensions only; editing rules also apply.`;
-    $('passport-source').href = preset.source;
-  }
+  const presetId = valid && state.mode === 'crop' && ppi === 300 && Object.keys(sizePresets).find(id => sizePresets[id].width === width && sizePresets[id].height === height);
+  $('size-preset').value = presetId || '';
   ['width', 'height'].forEach(id => $(id).setAttribute('aria-invalid', String(!valid)));
   $('resolution').setAttribute('aria-invalid', String(!validPpi));
   $('dimensions-error').hidden = valid;
@@ -189,8 +182,8 @@ function applyPreset(width, height, ppi = state.ppi) {
   updateDimensions();
 }
 document.querySelectorAll('[data-size]').forEach(b => b.addEventListener('click', () => { const [w, h] = b.dataset.size.split(','); applyPreset(w, h); }));
-$('passport-size').addEventListener('change', e => {
-  const preset = passportPresets[e.target.value];
+$('size-preset').addEventListener('change', e => {
+  const preset = sizePresets[e.target.value];
   if (!preset) return;
   applyPreset(preset.width, preset.height, 300);
 });

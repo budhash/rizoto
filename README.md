@@ -26,17 +26,9 @@ With **Resample image** off, output pixel dimensions remain equal to the origina
 
 Below 640px, the editor uses stacked panels with no nested adjustment-panel scrolling. Photo positioning uses pointer events for touch dragging; zoom has a touch-sized slider. Form controls use 16px text and 44px targets to reduce iPhone focus zoom and make inputs easier to tap. Mobile visual/device testing is manual; a physical-phone compatibility check has not been performed in this release.
 
-## Passport size presets
+## Custom size presets
 
-The final preset dropdown offers print-dimension references:
-
-| Preset | Physical print size | Output pixels at 300 pixels/inch |
-| --- | --- | --- |
-| [US](https://travel.state.gov/en/passports/apply/help/photos.html) | 2 × 2 inches | 600 × 600 |
-| [UK](https://www.gov.uk/photos-for-passports/photo-requirements) | 35 × 45 mm | 413 × 531 |
-| [Canada](https://www.canada.ca/en/immigration-refugees-citizenship/services/canadian-passports/photos.html) | 50 × 70 mm | 591 × 827 |
-
-Set the listed physical size in your printing software: pixel dimensions alone do not fix the printed size. These presets set dimensions only, not passport eligibility. Official rules also govern editing, head size, background, capture, and printing; the selected preset links to its authority’s requirements. These are not online-upload presets.
+Square, Story, Landscape, and Custom share one preset row. Custom offers 2 × 2 inches (600 × 600 pixels), 35 × 45 mm (413 × 531), and 50 × 70 mm (591 × 827), each at 300 pixels/inch. Width and height also accept arbitrary values. On very narrow screens the preset row scrolls horizontally rather than wrapping.
 
 ## Validation
 

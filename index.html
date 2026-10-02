@@ -27,7 +27,7 @@
   <link rel="icon" href="icon.svg" type="image/svg+xml">
   <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"rizoto","url":"https://budhash.com/rizoto/","applicationCategory":"MultimediaApplication","operatingSystem":"Any (web browser)","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"description":"Resize and crop photos to any pixel dimensions, privately in your browser.","author":{"@type":"Person","name":"budhash","url":"https://github.com/budhash"},"@id":"https://budhash.com/rizoto/#app","image":"https://budhash.com/rizoto/social-preview.png","inLanguage":"en","isAccessibleForFree":true}</script>
   <link rel="stylesheet" href="theme.css?v=2645db8035d7">
-  <link rel="stylesheet" href="style.css?v=2d838d170cda">
+  <link rel="stylesheet" href="style.css?v=221667d722a6">
 </head>
 <body>
   <main class="app">
@@ -57,8 +57,7 @@
           <p id="dimensions-error" class="field-error" role="status" hidden></p>
           <div class="resolution-row"><label for="resolution">Resolution</label><input id="resolution" type="number" min="1" max="2400" step="1" value="300" aria-describedby="resolution-hint"><span>pixels/inch</span></div>
           <p id="resolution-hint" class="hint">Print resolution is saved in PNG and JPG. WebP uses pixel dimensions.</p>
-          <div class="presets"><button data-size="1080,1080">Square</button><button data-size="1080,1920">Story</button><button data-size="1920,1080">Landscape</button><select id="passport-size" aria-label="Sizes" aria-describedby="passport-note"><option value="">Sizes</option><optgroup label="Printed photo sizes"><option value="us">US · 2 × 2 in</option><option value="uk">UK · 35 × 45 mm</option><option value="ca">Canada · 50 × 70 mm</option></optgroup></select></div>
-          <p id="passport-note" class="hint" hidden><span id="passport-details"></span> <a id="passport-source" target="_blank" rel="noopener">Official photo rules ↗</a></p>
+          <div class="presets"><button data-size="1080,1080">Square</button><button data-size="1080,1920">Story</button><button data-size="1920,1080">Landscape</button><select id="size-preset" aria-label="Custom sizes"><option value="">Custom</option><option value="inch-square">2 × 2 in</option><option value="mm-35-45">35 × 45 mm</option><option value="mm-50-70">50 × 70 mm</option></select></div>
           <p id="size-summary" class="hint">Any aspect ratio. No stretching.</p>
         </section>
         <section><div class="section-heading"><h2 id="fit-heading">Find the perfect fit</h2></div>
@@ -84,6 +83,6 @@
   <script src="crop-math.js?v=86d4870b358a" defer></script>
   <script src="resize-math.js?v=f19ff88df257" defer></script>
   <script src="export-resolution.js?v=4724b4e7b5ff" defer></script>
-  <script src="app.js?v=1a5b9cd4d2d0" defer></script>
+  <script src="app.js?v=aac38ddc2b30" defer></script>
 </body>
 </html>
