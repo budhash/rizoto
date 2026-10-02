@@ -33,4 +33,4 @@ This folder is the independent **`budhash/rizoto`** repository. GitHub Pages ser
 
 The `budhash/budhash.github.io` portfolio owns the `budhash.com` custom domain, so project Pages are served at `https://budhash.com/rizoto/`. Do not set a separate custom domain or add a `CNAME` here. The portfolio repository contains only Rizoto's card, sitemap entry, and a redirect from the former `/frame/` URL.
 
-The repository is private; the deployed website and its browser assets are public. Photos are never uploaded. There are no external fonts, analytics, tracking scripts, or runtime dependencies.
+The repository and deployed website are public. Photos are never uploaded. There are no external fonts, analytics, tracking scripts, or runtime dependencies.

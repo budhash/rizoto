@@ -10,7 +10,7 @@ a:focus-visible, .upload:focus-visible, canvas:focus-visible {
 }
 [hidden] { display: none !important; }
 .app { max-width: min(1240px, 94vw); margin: 0 auto; padding: clamp(28px, 5vh, 64px) clamp(16px, 3vw, 40px) 36px; }
-.tool-header { position: relative; padding-right: 140px; }
+.tool-header { position: relative; padding-right: 230px; }
 h1 .dot { color: var(--accent); }
 .top-links { position: absolute; top: 2px; right: 0; display: inline-flex; align-items: center; gap: 20px; }
 .navlink { font-family: var(--mono); font-size: 12px; letter-spacing: .08em; color: var(--paper-dim); background: none; border: 0; padding: 0; }
